@@ -16,6 +16,7 @@ import {FormsModule} from "@angular/forms";
 import {registerLocaleData} from "@angular/common";
 import localEs from "@angular/common/locales/es";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DetalleComponent } from './clientes/detalle/detalle.component';
 
 
 registerLocaleData(localEs, 'es');
@@ -26,7 +27,7 @@ const routes: Routes = [
   {path:'clientes', component: ClientesComponent},
   {path:'clientes/pages/:page', component: ClientesComponent},
   {path:'clientes/form', component:FormComponent},
-  {path:'clientes/form/:id', component:FormComponent}
+  {path:'clientes/form/:id', component:FormComponent},
 ]
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ const routes: Routes = [
     DirectivaComponent,
     ClientesComponent,
     FormComponent,
-    PaginatorComponent
+    PaginatorComponent,
+    DetalleComponent
   ],
   imports: [
     BrowserModule,

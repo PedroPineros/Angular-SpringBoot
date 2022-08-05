@@ -1,3 +1,4 @@
+<app-detalle *ngIf="clienteSeleccionado" [cliente] = "clienteSeleccionado"></app-detalle>
 <div class="card" >
   <div class="card-body">
     <h5 class="card-title">Clientes</h5>
@@ -11,7 +12,7 @@
         <table class="table table-bordered table-striped" *ngIf="clientes?.length>0">
           <thead>
             <tr>
-              <th>id</th>
+              <th>Perfil</th>
               <th>Nombre</th>
               <th>Apellido</th>
               <th>Fecha</th>
@@ -22,7 +23,20 @@
           </thead>
           <tbody>
             <tr *ngFor="let cliente of clientes">
-              <td>{{cliente.id}}</td>
+              <td style="text-align: center">
+                <img
+                  *ngIf="cliente?.foto" src="http://localhost:8080/api/uploads/img/{{cliente.foto}}"
+                  alt="{{cliente.foto}}" class="img-thumbnail rounded"
+                  (click)="abrirModal(cliente)"
+                  style="width: 64px; cursor: pointer; border-radius: 10px "
+                >
+                <img
+                  *ngIf="!cliente?.foto" src="http://localhost:8080/images/defaultUser.png"
+                  alt="Sin foto" class="img-thumbnail rounded"
+                  (click)="abrirModal(cliente)"
+                  style="width: 64px; cursor: pointer; border-radius: 10px "
+                >
+              </td>
               <td>{{cliente.nombre}}</td>
               <td>{{cliente.apellido | uppercase}}</td>
               <td>{{cliente.createAt | date : "EEE dd, MMMM yyyy" }}</td>

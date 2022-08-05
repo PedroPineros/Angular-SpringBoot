@@ -1,7 +1,7 @@
 import { Component, OnInit , OnChanges} from '@angular/core';
 import { Cliente } from './cliente';
 import { ClienteService } from './cliente.service';
-import { CLIENTES } from './clientes.json';
+import {ModalService} from "./detalle/modal.service";
 import Swal from "sweetalert2";
 import {tap} from 'rxjs/operators';
 import {ActivatedRoute} from "@angular/router";
@@ -13,9 +13,13 @@ import {ActivatedRoute} from "@angular/router";
 export class ClientesComponent implements OnInit{
   clientes: Cliente[];
   pagination: any;
+  clienteSeleccionado:Cliente;
 
 
-  constructor(private clienteService: ClienteService, private activatedRoute: ActivatedRoute) {}
+  constructor(private clienteService: ClienteService,
+              private activatedRoute: ActivatedRoute,
+              private modalService : ModalService
+              ) {}
 
   ngOnInit(): void {
 
@@ -33,6 +37,14 @@ export class ClientesComponent implements OnInit{
       ).subscribe((response: any) => {
         this.clientes = response.content as Cliente[];
       this.pagination = response;
+      })
+    })
+    this.modalService.notificaUpload.subscribe(cliente =>{
+      this.clientes = this.clientes.map(clienteOriginal => {
+        if(cliente.id == clienteOriginal.id){
+          clienteOriginal.foto = cliente.foto;
+        }
+        return clienteOriginal
       })
     })
   }
@@ -69,5 +81,10 @@ export class ClientesComponent implements OnInit{
 
       }
     })
+  }
+
+  abrirModal(cliente:Cliente){
+    this.clienteSeleccionado = cliente;
+    this.modalService.abrirModal();
   }
 }
