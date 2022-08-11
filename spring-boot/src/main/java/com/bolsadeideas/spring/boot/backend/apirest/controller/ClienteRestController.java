@@ -1,6 +1,7 @@
 package com.bolsadeideas.spring.boot.backend.apirest.controller;
 
 import com.bolsadeideas.spring.boot.backend.apirest.models.entity.Cliente;
+import com.bolsadeideas.spring.boot.backend.apirest.models.entity.Region;
 import com.bolsadeideas.spring.boot.backend.apirest.models.services.IClienteService;
 import com.bolsadeideas.spring.boot.backend.apirest.models.services.IUploadsFileService;
 import com.sun.org.apache.xerces.internal.impl.io.MalformedByteSequenceException;
@@ -126,6 +127,7 @@ public class ClienteRestController {
             clienteActual.setNombre(cliente.getNombre());
             clienteActual.setApellido(cliente.getApellido());
             clienteActual.setEmail(cliente.getEmail());
+            clienteActual.setRegion(cliente.getRegion());
 
             clienteUpdate = clienteService.save(clienteActual);
         } catch (DataAccessException e){
@@ -197,5 +199,10 @@ public class ClienteRestController {
         HttpHeaders cabecera = new HttpHeaders();
         cabecera.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + recurso.getFilename() + "\"");
         return new ResponseEntity<Resource>(recurso, cabecera, HttpStatus.OK);
+    }
+
+    @GetMapping("/clientes/regiones")
+    public List<Region> ListarRegiones(){
+        return clienteService.findAllRegiones();
     }
 }

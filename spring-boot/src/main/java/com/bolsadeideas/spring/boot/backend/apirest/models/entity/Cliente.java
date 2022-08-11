@@ -1,5 +1,8 @@
 package com.bolsadeideas.spring.boot.backend.apirest.models.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -37,6 +40,12 @@ public class Cliente implements Serializable {
 	private Date createAt;
 
 	private String foto;
+
+	@NotNull(message = "La region no puede ser vacia")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="region_id")
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	private Region region;
 
 	//@PrePersist
 	//public void prePersist(){
@@ -86,6 +95,14 @@ public class Cliente implements Serializable {
 	public String getFoto() {return foto;}
 
 	public void setFoto(String foto) {this.foto = foto;	}
+
+	public Region getRegion() {
+		return region;
+	}
+
+	public void setRegion(Region region) {
+		this.region = region;
+	}
 
 	private static final long serialVersionUID = 1L;
 }

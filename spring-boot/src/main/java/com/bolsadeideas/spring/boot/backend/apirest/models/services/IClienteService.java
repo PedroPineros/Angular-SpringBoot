@@ -3,6 +3,7 @@ package com.bolsadeideas.spring.boot.backend.apirest.models.services;
 import java.util.List;
 
 import com.bolsadeideas.spring.boot.backend.apirest.models.entity.Cliente;
+import com.bolsadeideas.spring.boot.backend.apirest.models.entity.Region;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,4 +15,5 @@ public interface IClienteService {
  public Cliente findById(Long id);
  public Cliente save(Cliente cliente);
  public void delete (Long id);
+ public List<Region> findAllRegiones();
 }
