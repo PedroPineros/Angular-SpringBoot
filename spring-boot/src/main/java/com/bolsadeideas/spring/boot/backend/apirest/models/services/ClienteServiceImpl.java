@@ -15,7 +15,7 @@ import com.bolsadeideas.spring.boot.backend.apirest.models.entity.Cliente;
 @Service
 public class ClienteServiceImpl implements IClienteService {
 
-	@Autowired
+	@Autowired(required = false)
 	private IClienteDao clienteDao;
 	
 	@Override

@@ -37,10 +37,10 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class ClienteRestController {
 
-    @Autowired
+    @Autowired(required = false)
     private IClienteService clienteService;
 
-    @Autowired
+    @Autowired(required = false)
     private IUploadsFileService uploadsFileService;
 
     private final Logger log = LoggerFactory.getLogger(ClienteRestController.class);

@@ -18,6 +18,8 @@ export class ClienteService {
 
   constructor(private http: HttpClient, private router : Router) { }
 
+  getRegiones
+
   getClientes(page : number): Observable<any[]>{
     return this.http.get<any[]>(this.urlEndPoint + '/pages/' + page).pipe(
       tap((response: any) =>{
