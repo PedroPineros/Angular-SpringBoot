@@ -19,8 +19,21 @@ export class ClienteService {
 
   constructor(private http: HttpClient, private router : Router) { }
 
+  private isNoAutorizado(e):boolean{
+    if(e.status == 401 || e.status ==403){
+      this.router.navigate(['/login']);
+      return true;
+    }
+    return false;
+  }
+
   getRegiones(): Observable<Region[]>{
-    return this.http.get<Region[]>(this.urlEndPoint + "/regiones");
+    return this.http.get<Region[]>(this.urlEndPoint + "/regiones").pipe(
+      catchError(e =>  {
+        this.isNoAutorizado(e);
+        return throwError(e);
+      })
+    );
   }
 
   getClientes(page : number): Observable<any[]>{
@@ -51,6 +64,9 @@ export class ClienteService {
   create(cliente: Cliente) : Observable<any>{
     return this.http.post<any>(`${this.urlEndPoint}`, cliente, {headers: this.httpHeaders}).pipe(
       catchError(e => {
+        if(this.isNoAutorizado(e)){
+          return throwError(e);
+        }
         if(e.status == 400){
             return throwError(e);
         }
@@ -63,6 +79,9 @@ export class ClienteService {
   getCliente(id): Observable<Cliente>{
     return  this.http.get<Cliente>(`${this.urlEndPoint}/${id}`).pipe(
       catchError(e =>{
+        if(this.isNoAutorizado(e)){
+          return throwError(e);
+        }
         this.router.navigate(['/clientes'])
         console.log(e.error.mensaje);
         Swal.fire(e.error.mensaje, e.error.error,'error')
@@ -73,6 +92,9 @@ export class ClienteService {
   update(cliente: Cliente): Observable<any>{
     return this.http.put<any>(`${this.urlEndPoint}/${cliente.id}`, cliente, {headers: this.httpHeaders}).pipe(
       catchError(e => {
+        if(this.isNoAutorizado(e)){
+          return throwError(e);
+        }
         if(e.status == 400){
           return throwError(e);
         }
@@ -82,8 +104,17 @@ export class ClienteService {
     )
   }
   delete(id): Observable<Cliente>{
-    return this.http.delete<Cliente>(`${this.urlEndPoint}/${id}`,{headers: this.httpHeaders})
-  }
+    return this.http.delete<Cliente>(`${this.urlEndPoint}/${id}`,{headers: this.httpHeaders}).pipe(
+      catchError(e =>{
+        if(this.isNoAutorizado(e)){
+          return throwError(e);
+        }
+          Swal.fire(e.error.mensaje, e.error.error,'error')
+          return throwError(() => e)
+      }
+      ))
+}
+
 
   subirFoto(archivo: File, id): Observable<HttpEvent<{}>>{
     let formData = new FormData();
@@ -92,6 +123,11 @@ export class ClienteService {
     const req = new HttpRequest('POST', `${this.urlEndPoint}/upload`, formData,{
       reportProgress: true
     });
-    return this.http.request(req);
+    return this.http.request(req).pipe(
+      catchError(e =>  {
+        this.isNoAutorizado(e);
+        return throwError(e);
+      })
+    )
   }
 }
