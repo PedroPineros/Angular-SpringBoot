@@ -109,7 +109,7 @@ public class ClienteRestController {
     }
 
     @Secured("ROLE_ADMIN")
-    @PutMapping("/cliente/{id}")
+    @PutMapping("/clientes/{id}")
     public ResponseEntity<?> update(@Valid @RequestBody Cliente cliente, BindingResult result, @PathVariable Long id){
         Cliente clienteActual = clienteService.findById(id);
         Cliente clienteUpdate = null;
