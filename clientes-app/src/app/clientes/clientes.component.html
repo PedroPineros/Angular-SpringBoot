@@ -4,7 +4,7 @@
     <h5 class="card-title">Clientes</h5>
     <h6 class="card-subtitle mb-2 text-muted">Listado de clientes</h6>
     <div class="my-2 text-left">
-      <button class="btn btn-rounded btn-primary" type="button" [routerLink]="['/clientes/form']">Crear Cliente</button>
+      <button *ngIf="authService.hasRole('ROLE_ADMIN')" class="btn btn-rounded btn-primary" type="button" [routerLink]="['/clientes/form']">Crear Cliente</button>
     </div>
     <div *ngIf="clientes?.length==0">
       <h2>No hay registros</h2>
@@ -12,18 +12,18 @@
         <table class="table table-bordered table-striped" *ngIf="clientes?.length>0">
           <thead>
             <tr>
-              <th>Perfil</th>
+              <th *ngIf="authService.hasRole('ROLE_USER')" >Perfil</th>
               <th>Nombre</th>
               <th>Apellido</th>
               <th>Fecha</th>
               <th>Email</th>
-              <th>Editar</th>
-              <th>Eliminar</th>
+              <th *ngIf="authService.hasRole('ROLE_ADMIN')">Editar</th>
+              <th *ngIf="authService.hasRole('ROLE_ADMIN')">Eliminar</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let cliente of clientes">
-              <td style="text-align: center">
+              <td *ngIf="authService.hasRole('ROLE_USER')"  style="text-align: center">
                 <img
                   *ngIf="cliente?.foto" src="http://localhost:8080/api/uploads/img/{{cliente.foto}}"
                   alt="{{cliente.foto}}" class="img-thumbnail rounded"
@@ -41,10 +41,10 @@
               <td>{{cliente.apellido | uppercase}}</td>
               <td>{{cliente.createAt | date : "EEE dd, MMMM yyyy" }}</td>
               <td>{{cliente.email}}</td>
-              <td>
+              <td *ngIf="authService.hasRole('ROLE_ADMIN')">
                 <button class="btn btn-info" name="button" type="button" [routerLink]="['/clientes/form', cliente.id]">Editar</button>
               </td>
-              <td>
+              <td *ngIf="authService.hasRole('ROLE_ADMIN')">
                 <button class="btn btn-danger" name="eliminar" type="button" (click)="deleteCliente(cliente)">Eliminar</button>
               </td>
             </tr>
