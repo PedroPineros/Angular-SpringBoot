@@ -11,14 +11,17 @@ import { FormComponent } from './clientes/form.component';
 
 import { ClienteService } from './clientes/cliente.service';
 import { RouterModule, Routes } from '@angular/router';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {FormsModule} from "@angular/forms";
 import {registerLocaleData} from "@angular/common";
 import localEs from "@angular/common/locales/es";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DetalleComponent } from './clientes/detalle/detalle.component';
 import { LoginComponent } from './usuarios/login.component';
-
+import {AuthGuard} from './usuarios/guards/auth.guard';
+import {RoleGuard} from './usuarios/guards/role.guard';
+import {TokenInterceptor} from "./usuarios/interceptors/token.interceptor";
+import {AuthInterceptor} from "./usuarios/interceptors/auth.interceptor";
 
 registerLocaleData(localEs, 'es');
 
@@ -27,8 +30,8 @@ const routes: Routes = [
   {path:'directivas', component: DirectivaComponent},
   {path:'clientes', component: ClientesComponent},
   {path:'clientes/pages/:page', component: ClientesComponent},
-  {path:'clientes/form', component:FormComponent},
-  {path:'clientes/form/:id', component:FormComponent},
+  {path:'clientes/form', component:FormComponent, canActivate:[AuthGuard, RoleGuard], data:{role:'ROLE_ADMIN'}},
+  {path:'clientes/form/:id', component:FormComponent, canActivate:[AuthGuard, RoleGuard], data:{role:'ROLE_ADMIN'}},
   {path:'login', component:LoginComponent},
 ]
 @NgModule({
@@ -50,7 +53,10 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
     BrowserAnimationsModule,
   ],
-  providers: [ClienteService, {provide: LOCALE_ID, useValue: "es"}],
-  bootstrap: [AppComponent]
+providers: [ClienteService,
+  {provide: LOCALE_ID, useValue: "es"},
+  {provide : HTTP_INTERCEPTORS, useClass : TokenInterceptor , multi : true },
+  {provide : HTTP_INTERCEPTORS, useClass : AuthInterceptor , multi : true },],
+bootstrap: [AppComponent]
 })
 export class AppModule { }
