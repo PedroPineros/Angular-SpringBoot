@@ -24,7 +24,7 @@ public class Usuario implements Serializable {
 
     private String apellido;
 
-    @Column(unique = true)
+    //@Column(unique = true)
     private String email;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
