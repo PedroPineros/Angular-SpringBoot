@@ -2,6 +2,8 @@ package com.bolsadeideas.spring.boot.backend.apirest.models.services;
 
 import java.util.List;
 
+import com.bolsadeideas.spring.boot.backend.apirest.models.dao.IFacturaDao;
+import com.bolsadeideas.spring.boot.backend.apirest.models.entity.Factura;
 import com.bolsadeideas.spring.boot.backend.apirest.models.entity.Region;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,8 +17,11 @@ import com.bolsadeideas.spring.boot.backend.apirest.models.entity.Cliente;
 @Service
 public class ClienteServiceImpl implements IClienteService {
 
-	@Autowired(required = false)
+	@Autowired
 	private IClienteDao clienteDao;
+
+	@Autowired
+	private IFacturaDao facturaDao;
 	
 	@Override
 	@Transactional(readOnly = true)
@@ -52,6 +57,24 @@ public class ClienteServiceImpl implements IClienteService {
 	@Transactional(readOnly = true)
 	public List<Region> findAllRegiones() {
 		return clienteDao.findAllRegiones();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Factura findFacturaById(Long id) {
+		return facturaDao.findById(id).orElse(null);
+	}
+
+	@Override
+	@Transactional
+	public Factura saveFactura(Factura factura) {
+		return facturaDao.save(factura);
+	}
+
+	@Override
+	@Transactional
+	public void deleteFacturaById(Long id) {
+		deleteFacturaById(id);
 	}
 
 
