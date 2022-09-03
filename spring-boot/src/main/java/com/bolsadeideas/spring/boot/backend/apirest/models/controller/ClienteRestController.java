@@ -1,4 +1,4 @@
-package com.bolsadeideas.spring.boot.backend.apirest.controller;
+package com.bolsadeideas.spring.boot.backend.apirest.models.controller;
 
 import com.bolsadeideas.spring.boot.backend.apirest.models.entity.Cliente;
 import com.bolsadeideas.spring.boot.backend.apirest.models.entity.Region;
@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,21 +18,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins={"http://localhost:4200"})
+@CrossOrigin(origins={"http://localhost:4200","*"})
 @RestController
 @RequestMapping("/api")
 public class ClienteRestController {
@@ -57,7 +51,7 @@ public class ClienteRestController {
         return clienteService.findAll(pageable);
     }
 
-    //@Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @GetMapping("/clientes/{id}")
     public ResponseEntity<?> show(@PathVariable Long id){
         Cliente cliente = null;

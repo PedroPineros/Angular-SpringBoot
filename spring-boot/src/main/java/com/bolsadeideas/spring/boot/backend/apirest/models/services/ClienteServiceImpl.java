@@ -3,7 +3,9 @@ package com.bolsadeideas.spring.boot.backend.apirest.models.services;
 import java.util.List;
 
 import com.bolsadeideas.spring.boot.backend.apirest.models.dao.IFacturaDao;
+import com.bolsadeideas.spring.boot.backend.apirest.models.dao.IProductoDao;
 import com.bolsadeideas.spring.boot.backend.apirest.models.entity.Factura;
+import com.bolsadeideas.spring.boot.backend.apirest.models.entity.Producto;
 import com.bolsadeideas.spring.boot.backend.apirest.models.entity.Region;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,6 +24,9 @@ public class ClienteServiceImpl implements IClienteService {
 
 	@Autowired
 	private IFacturaDao facturaDao;
+
+	@Autowired
+	private IProductoDao productoDao;
 	
 	@Override
 	@Transactional(readOnly = true)
@@ -75,6 +80,12 @@ public class ClienteServiceImpl implements IClienteService {
 	@Transactional
 	public void deleteFacturaById(Long id) {
 		facturaDao.deleteById(id);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Producto> findProductoByNombre(String term) {
+		return productoDao.findByNombreContainingIgnoreCase(term);
 	}
 
 
