@@ -3,6 +3,7 @@ import {FacturaService} from "./services/factura.service";
 import {Factura} from "./models/factura";
 import {ActivatedRoute} from "@angular/router";
 
+
 @Component({
   selector: 'app-detalle-factura',
   templateUrl: './detalle-factura.component.html'
@@ -24,5 +25,7 @@ export class DetalleFacturaComponent implements OnInit {
       })
     })
   }
+
+
 
 }
