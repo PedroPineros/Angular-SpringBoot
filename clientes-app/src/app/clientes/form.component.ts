@@ -50,6 +50,7 @@ public errors: string[];
 }
 
   public update(): void{
+    this.cliente.facturas = null;
     this.clienteService.update(this.cliente).subscribe(cliente =>{
       this.router.navigate(['/clientes'])
       Swal.fire('Cliente actualizado', `Cliente: ${cliente.cliente.nombre} se actualizo`, 'success')
